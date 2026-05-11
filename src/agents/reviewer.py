@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any, Dict
 
-from src.agents.base_agent import AgentOutput, BaseAgent
+from src.agents.base_agent import AgentOutput, BaseAgent, format_task_context
 
 
 class ReviewerAgent(BaseAgent):
@@ -22,7 +22,7 @@ class ReviewerAgent(BaseAgent):
 任务类别：{task.get("category", "")}
 
 原始任务：
-{task["input"]}
+{format_task_context(task)}
 
 计划：
 {plan}

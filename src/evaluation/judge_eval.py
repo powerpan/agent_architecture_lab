@@ -8,7 +8,7 @@ from src.agents.base_agent import aggregate_usage
 from src.agents.judge import JudgeAgent
 
 
-def evaluate_with_judge(client: Any, task: Dict[str, Any], final_answer: str) -> Tuple[Dict[str, Any], Dict[str, int]]:
+def evaluate_with_judge(client: Any, task: Dict[str, Any], final_answer: str) -> Tuple[Dict[str, Any], Dict[str, Any]]:
     output = JudgeAgent(client).evaluate_quality(task, final_answer)
     usage = aggregate_usage([output])
     parsed = _parse_json_object(output.content)

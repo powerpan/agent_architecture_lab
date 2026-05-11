@@ -1,4 +1,4 @@
-{"id":"task_001","category":"system_design","input":"为一个本地个人知识库 RAG 系统设计评测体系，包括检索质量、回答质量、引用可信度和长期维护指标。"}
-{"id":"task_002","category":"technical_explanation","input":"解释为什么工业视觉中 U-Net 在某些细长结构分割任务上可能不输新版本 YOLO-seg。"}
-{"id":"task_003","category":"writing_outline","input":"围绕“多 Agent 系统一拆就废：问题不在 Agent 数量，而在状态共享方式”设计一篇技术文章大纲。"}
-{"id":"task_004","category":"critique","input":"审查一个多 Agent 系统方案，指出可能的上下文丢失、成本失控和责任边界问题。"}
+{"id":"task_001","category":"simple_platform_proposal","input":"请为题材“轻量级提示词流程实验台”设计一个简单实验平台方案。要求说明背景定位、主要用户、支持的流程、任务格式、输出记录、页面设计、评估方式和第一版边界。"}
+{"id":"task_002","category":"detailed_design_from_previous_proposal","input":"下面会提供你上一版写给我的简单方案。请在这个版本基础上扩展为详细设计文档，覆盖目录结构、配置、任务格式、运行模型、流程设计、状态管理、结果记录、评估、报告、Web 页面、异常处理和实施优先级。","material_file":"tasks/materials/task_001_simple_proposal.md"}
+{"id":"task_003","category":"review_previous_detailed_design","input":"下面会提供你上一版写给我的详细设计。请审查这份设计并输出审查报告，重点关注任务依赖公平性、共享状态污染、并发与限流、成本公式、失败记录、中间过程、API key 安全、Judge 设计和结果页展示问题。","material_file":"tasks/materials/task_002_detailed_design.md"}
+{"id":"task_004","category":"tradeoff_judgment_from_previous_review","input":"下面会提供你上一版写给我的审查报告。请从报告中选择一个最模糊、最有取舍的问题做多方面技术判断，要求给出支持方案 A 的理由、支持方案 B 的理由、关键风险、适用边界、推荐决策和后续验证方式。","material_file":"tasks/materials/task_003_review_report.md"}

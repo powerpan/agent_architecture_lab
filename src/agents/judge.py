@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any, Dict
 
-from src.agents.base_agent import AgentOutput, BaseAgent
+from src.agents.base_agent import AgentOutput, BaseAgent, format_task_context
 
 
 class JudgeAgent(BaseAgent):
@@ -22,7 +22,7 @@ class JudgeAgent(BaseAgent):
 任务类别：{task.get("category", "")}
 
 原始任务：
-{task["input"]}
+{format_task_context(task)}
 
 候选答案 A：
 {answer_a}
@@ -45,7 +45,7 @@ class JudgeAgent(BaseAgent):
 任务类别：{task.get("category", "")}
 
 任务内容：
-{task["input"]}
+{format_task_context(task)}
 
 待评价答案：
 {final_answer}

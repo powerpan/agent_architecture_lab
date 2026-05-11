@@ -15,6 +15,7 @@ class LLMResponse:
     completion_tokens: int
     total_tokens: int
     latency_seconds: float
+    finish_reason: str
 
 
 class DeepSeekClient:
@@ -23,7 +24,7 @@ class DeepSeekClient:
         self.base_url = model_config.get("base_url", "https://api.deepseek.com")
         self.model = model_config.get("model", "deepseek-v4-flash")
         self.temperature = float(model_config.get("temperature", 0.3))
-        self.max_tokens = int(model_config.get("max_tokens", 2000))
+        self.max_tokens = int(model_config.get("max_tokens", 6000))
         self.timeout_seconds = float(model_config.get("timeout_seconds", 60))
         self.max_retries = int(model_config.get("max_retries", 2))
         self.retry_backoff_seconds = float(model_config.get("retry_backoff_seconds", 1.0))
@@ -54,7 +55,8 @@ class DeepSeekClient:
                 self._respect_rate_limit()
                 completion = client.chat.completions.create(**payload)
                 latency_seconds = time.perf_counter() - started_at
-                content = completion.choices[0].message.content or ""
+                choice = completion.choices[0]
+                content = choice.message.content or ""
                 usage = self._extract_usage(completion)
                 return LLMResponse(
                     content=content.strip(),
@@ -63,6 +65,7 @@ class DeepSeekClient:
                     completion_tokens=usage["completion_tokens"],
                     total_tokens=usage["total_tokens"],
                     latency_seconds=latency_seconds,
+                    finish_reason=str(getattr(choice, "finish_reason", "") or ""),
                 )
             except Exception as exc:
                 last_error = exc

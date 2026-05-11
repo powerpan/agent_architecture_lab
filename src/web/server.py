@@ -374,9 +374,16 @@ def read_tasks_for_state(task_file: str) -> Tuple[List[Dict[str, Any]], str]:
     try:
         task_path = resolve_repo_path(task_file)
         tasks = load_tasks(str(task_path))
-        return tasks, ""
+        return [summarize_task_for_state(task) for task in tasks], ""
     except Exception as exc:
         return [], str(exc)
+
+
+def summarize_task_for_state(task: Dict[str, Any]) -> Dict[str, Any]:
+    summarized = {key: value for key, value in task.items() if key != "material_content"}
+    if task.get("material_content"):
+        summarized["material_chars"] = len(str(task.get("material_content") or ""))
+    return summarized
 
 
 def read_env_status() -> Dict[str, bool]:

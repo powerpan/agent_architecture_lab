@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any, Dict
 
-from src.agents.base_agent import AgentOutput, BaseAgent
+from src.agents.base_agent import AgentOutput, BaseAgent, format_task_context
 
 
 class PlannerAgent(BaseAgent):
@@ -22,7 +22,7 @@ class PlannerAgent(BaseAgent):
 任务类别：{task.get("category", "")}
 
 任务内容：
-{task["input"]}
+{format_task_context(task)}
 
 请输出一个执行计划，包含：
 1. 目标理解。

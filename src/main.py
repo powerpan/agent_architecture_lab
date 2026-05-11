@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import sys
 import time
@@ -69,6 +70,7 @@ def load_tasks(path: str) -> List[Dict[str, Any]]:
     task_path = Path(path)
     if not task_path.exists():
         raise FileNotFoundError(f"Task file not found: {task_path}")
+    task_path = task_path.resolve()
 
     tasks: List[Dict[str, Any]] = []
     with task_path.open("r", encoding="utf-8") as file:
@@ -82,8 +84,33 @@ def load_tasks(path: str) -> List[Dict[str, Any]]:
                 raise ValueError(f"Invalid JSON at {task_path}:{line_number}: {exc}") from exc
             if "id" not in task or "input" not in task:
                 raise ValueError(f"Task at {task_path}:{line_number} must include `id` and `input`.")
+            material_file = str(task.get("material_file") or "").strip()
+            if material_file:
+                material_path = resolve_material_path(material_file, task_path)
+                material_content = material_path.read_text(encoding="utf-8")
+                task["material_file"] = material_file
+                task["material_content"] = material_content
+                task["material_sha256"] = hashlib.sha256(material_content.encode("utf-8")).hexdigest()
             tasks.append(task)
     return tasks
+
+
+def resolve_material_path(material_file: str, task_path: Path) -> Path:
+    material_path = Path(material_file)
+    candidates = (
+        [material_path]
+        if material_path.is_absolute()
+        else [
+            Path.cwd() / material_path,
+            task_path.parent / material_path,
+            task_path.parent.parent / material_path,
+        ]
+    )
+    for candidate in candidates:
+        if candidate.exists():
+            return candidate.resolve()
+    searched = ", ".join(str(candidate) for candidate in candidates)
+    raise FileNotFoundError(f"Material file not found: {material_file}. Searched: {searched}")
 
 
 def resolve_runtime_config(args: argparse.Namespace) -> Dict[str, Any]:
@@ -137,6 +164,11 @@ def build_error_record(
         "total_tokens": 0,
         "estimated_cost": 0.0,
         "num_model_calls": 0,
+        "model_call_details": [],
+        "hit_token_limit": False,
+        "task_input": task.get("input", ""),
+        "material_file": task.get("material_file", ""),
+        "material_sha256": task.get("material_sha256", ""),
         "success": False,
         "error": str(error),
     }
@@ -195,6 +227,9 @@ def run_experiment(
                     "category": task.get("category", ""),
                     "architecture": architecture_name,
                     "model": client.model,
+                    "task_input": task.get("input", ""),
+                    "material_file": task.get("material_file", ""),
+                    "material_sha256": task.get("material_sha256", ""),
                     "final_answer": architecture_result["final_answer"],
                     "intermediate_outputs": architecture_result["intermediate_outputs"],
                     "latency_seconds": round(latency_seconds, 3),
@@ -203,6 +238,8 @@ def run_experiment(
                     "total_tokens": total_tokens,
                     "estimated_cost": estimated_cost,
                     "num_model_calls": architecture_result["num_model_calls"],
+                    "model_call_details": architecture_result.get("model_call_details", []),
+                    "hit_token_limit": architecture_result.get("hit_token_limit", False),
                     "success": True,
                     "error": "",
                 }

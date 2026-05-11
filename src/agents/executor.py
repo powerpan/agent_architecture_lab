@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any, Dict, Optional
 
-from src.agents.base_agent import AgentOutput, BaseAgent
+from src.agents.base_agent import AgentOutput, BaseAgent, format_task_context
 
 
 class ExecutorAgent(BaseAgent):
@@ -30,7 +30,7 @@ class ExecutorAgent(BaseAgent):
 任务类别：{task.get("category", "")}
 
 原始任务：
-{task["input"]}
+{format_task_context(task)}
 
 计划：
 {plan or "无"}
@@ -49,7 +49,7 @@ Reviewer 审查意见：
 任务类别：{task.get("category", "")}
 
 原始任务：
-{task["input"]}
+{format_task_context(task)}
 
 计划：
 {plan or "无"}
@@ -63,7 +63,7 @@ Reviewer 审查意见：
 任务类别：{task.get("category", "")}
 
 任务内容：
-{task["input"]}
+{format_task_context(task)}
 
 请从以下角度给出一份独立方案：
 {angle}
