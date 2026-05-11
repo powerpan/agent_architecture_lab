@@ -1,0 +1,11 @@
+architectures:
+- single
+- planner_executor
+- planner_executor_reviewer
+- debate
+max_concurrency: 1
+task_file: tasks/sample_tasks.jsonl
+output_dir: outputs/runs
+model_config: configs/model.yaml
+pricing_config: configs/pricing.yaml
+report_file: outputs/reports/summary.md

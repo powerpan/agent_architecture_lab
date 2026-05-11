@@ -1,0 +1,12 @@
+currency: CNY
+unit: per_1m_tokens
+cost_estimation_note: 当前估算默认使用缓存未命中输入价；如后续日志能拿到缓存命中 token，可再细分计算。
+models:
+  deepseek-v4-flash:
+    cached_input_per_1m_tokens: 0.02
+    input_per_1m_tokens: 1.0
+    output_per_1m_tokens: 2.0
+  deepseek-v4-pro:
+    cached_input_per_1m_tokens: 0.025
+    input_per_1m_tokens: 3.0
+    output_per_1m_tokens: 6.0

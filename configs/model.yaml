@@ -1,0 +1,39 @@
+provider: deepseek
+base_url: https://api.deepseek.com
+anthropic_base_url: https://api.deepseek.com/anthropic
+model: deepseek-v4-flash
+model_version: DeepSeek-V4-Flash
+reasoning_mode: default
+temperature: 0.3
+max_tokens: 2000
+context_length_tokens: 1000000
+max_output_tokens_supported: 384000
+timeout_seconds: 60.0
+max_retries: 2
+retry_backoff_seconds: 1.0
+min_request_interval_seconds: 1.0
+available_models:
+- id: deepseek-v4-flash
+  version: DeepSeek-V4-Flash
+  openai_base_url: https://api.deepseek.com
+  anthropic_base_url: https://api.deepseek.com/anthropic
+  reasoning_mode: 支持非思考与思考模式（默认）
+  context_length_tokens: 1000000
+  max_output_tokens_supported: 384000
+  supports:
+    json_output: true
+    tool_calls: true
+    chat_prefix_completion_beta: true
+    fim_completion_beta: 仅非思考模式支持
+- id: deepseek-v4-pro
+  version: DeepSeek-V4-Pro
+  openai_base_url: https://api.deepseek.com
+  anthropic_base_url: https://api.deepseek.com/anthropic
+  reasoning_mode: 支持非思考与思考模式（默认）
+  context_length_tokens: 1000000
+  max_output_tokens_supported: 384000
+  supports:
+    json_output: true
+    tool_calls: true
+    chat_prefix_completion_beta: true
+    fim_completion_beta: 仅非思考模式支持
