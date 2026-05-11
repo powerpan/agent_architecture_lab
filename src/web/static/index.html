@@ -247,6 +247,7 @@
         width: 100%;
         border-collapse: collapse;
         min-width: 640px;
+        table-layout: fixed;
       }
 
       th,
@@ -278,8 +279,32 @@
       }
 
       .task-input {
-        max-width: 560px;
         line-height: 1.45;
+      }
+
+      .task-table {
+        min-width: 920px;
+      }
+
+      .task-table .id-column {
+        width: 92px;
+      }
+
+      .task-table .category-column {
+        width: 210px;
+      }
+
+      .task-table .input-column {
+        width: auto;
+      }
+
+      .task-table .material-column {
+        width: 210px;
+      }
+
+      .task-material {
+        overflow-wrap: anywhere;
+        word-break: break-word;
       }
 
       .tabs {
@@ -469,6 +494,11 @@
         align-items: start;
       }
 
+      .result-grid > *,
+      .artifact-layout > * {
+        min-width: 0;
+      }
+
       .record-list {
         display: grid;
         gap: 8px;
@@ -509,10 +539,17 @@
         background: #fbfcfd;
         line-height: 1.55;
         font-size: 13px;
+        max-width: 100%;
+        overflow-wrap: anywhere;
+        word-break: break-word;
       }
 
       .markdown-body {
-        overflow: auto;
+        max-width: 100%;
+        overflow-x: hidden;
+        overflow-y: visible;
+        overflow-wrap: anywhere;
+        word-break: break-word;
       }
 
       .markdown-body h1,
@@ -557,6 +594,15 @@
         background: #eef2f6;
         padding: 1px 5px;
         font-size: 12px;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+      }
+
+      .markdown-body pre {
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+        word-break: break-word;
       }
 
       .markdown-body pre code {
@@ -567,11 +613,22 @@
       }
 
       .markdown-body table {
+        display: block;
+        width: 100%;
+        max-width: 100%;
         min-width: 0;
         margin: 10px 0;
         border: 1px solid var(--line);
         border-radius: 8px;
-        overflow: hidden;
+        overflow-x: auto;
+        table-layout: auto;
+      }
+
+      .markdown-body th,
+      .markdown-body td {
+        white-space: normal;
+        overflow-wrap: anywhere;
+        word-break: break-word;
       }
 
       .markdown-body blockquote {
@@ -668,6 +725,9 @@
         padding: 12px;
         font-size: 12px;
         line-height: 1.45;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+        word-break: break-word;
       }
 
       .message {
@@ -1143,14 +1203,20 @@
                 <td>${escapeHtml(task.id || "")}</td>
                 <td>${escapeHtml(task.category || "")}</td>
                 <td class="task-input">${escapeHtml(task.input || "")}</td>
-                <td>${task.material_file ? `${escapeHtml(task.material_file)}<br /><span class="subtle">${task.material_chars || 0} chars</span>` : '<span class="subtle">无</span>'}</td>
+                <td class="task-material">${task.material_file ? `${escapeHtml(task.material_file)}<br /><span class="subtle">${task.material_chars || 0} chars</span>` : '<span class="subtle">无</span>'}</td>
               </tr>
             `
           )
           .join("");
         $("taskArea").innerHTML = `
           <div class="table-wrap">
-            <table>
+            <table class="task-table">
+              <colgroup>
+                <col class="id-column" />
+                <col class="category-column" />
+                <col class="input-column" />
+                <col class="material-column" />
+              </colgroup>
               <thead><tr><th>ID</th><th>Category</th><th>Input</th><th>Material</th></tr></thead>
               <tbody>${rows}</tbody>
             </table>

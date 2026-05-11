@@ -115,6 +115,7 @@ tasks/sample_tasks.jsonl
 - `id`
 - `category`
 - `input`
+- `output_constraints`，可选，用于限制答案长度、细节层级或格式
 - `material_file`，可选
 
 当前基准集使用三个预置上一版材料文件：
@@ -187,6 +188,7 @@ outputs/runs/<run_id>.jsonl
 - `architecture`
 - `model`
 - `task_input`
+- `output_constraints`
 - `material_file`
 - `material_sha256`
 - `final_answer`

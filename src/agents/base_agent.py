@@ -79,6 +79,9 @@ def aggregate_usage(outputs: List[AgentOutput]) -> Dict[str, Any]:
 
 def format_task_context(task: Dict[str, Any]) -> str:
     parts = [f"任务说明：\n{task['input']}"]
+    output_constraints = str(task.get("output_constraints") or "").strip()
+    if output_constraints:
+        parts.append(f"输出约束：\n{output_constraints}")
     material_content = str(task.get("material_content") or "").strip()
     if material_content:
         material_file = str(task.get("material_file") or "previous material")
