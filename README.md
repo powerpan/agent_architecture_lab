@@ -110,6 +110,13 @@ source .venv/bin/activate
 python -m src.web.server --host 127.0.0.1 --port 8765
 ```
 
+也可以直接运行项目里的启动脚本。脚本会优先使用本地 `.venv`，如果依赖不存在会先安装依赖：
+
+```bash
+cd /Users/ericpan/game_project/agent-architecture-lab
+./start-ui.command
+```
+
 然后打开：
 
 ```text
