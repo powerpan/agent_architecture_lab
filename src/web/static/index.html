@@ -92,6 +92,32 @@
         justify-content: flex-end;
       }
 
+      .nav {
+        display: inline-grid;
+        grid-template-columns: repeat(3, auto);
+        gap: 4px;
+        padding: 4px;
+        background: var(--surface-muted);
+        border-radius: 8px;
+      }
+
+      .nav-button {
+        min-height: 32px;
+        border: 0;
+        border-radius: 6px;
+        padding: 6px 12px;
+        color: var(--muted);
+        background: transparent;
+        cursor: pointer;
+        font-weight: 650;
+      }
+
+      .nav-button.active {
+        background: var(--surface);
+        color: var(--text);
+        box-shadow: var(--shadow);
+      }
+
       .badge {
         display: inline-flex;
         align-items: center;
@@ -117,12 +143,30 @@
         background: #fff7ed;
       }
 
+      .page-shell {
+        padding: 18px;
+      }
+
+      .page {
+        display: none;
+      }
+
+      .page.active {
+        display: block;
+      }
+
       .layout {
         display: grid;
-        grid-template-columns: minmax(420px, 1fr) minmax(400px, 520px);
+        grid-template-columns: minmax(420px, 1fr) minmax(360px, 520px);
         gap: 18px;
-        padding: 18px;
         align-items: start;
+      }
+
+      .single-column {
+        display: grid;
+        gap: 18px;
+        max-width: 1180px;
+        margin: 0 auto;
       }
 
       .section {
@@ -223,6 +267,14 @@
 
       tr:last-child td {
         border-bottom: 0;
+      }
+
+      .click-row {
+        cursor: pointer;
+      }
+
+      .click-row:hover td {
+        background: #f8fafc;
       }
 
       .task-input {
@@ -410,6 +462,160 @@
         color: var(--muted);
       }
 
+      .result-grid {
+        display: grid;
+        grid-template-columns: minmax(260px, 340px) 1fr;
+        gap: 16px;
+        align-items: start;
+      }
+
+      .record-list {
+        display: grid;
+        gap: 8px;
+      }
+
+      .record-card {
+        width: 100%;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fbfcfd;
+        padding: 10px;
+        display: grid;
+        gap: 7px;
+        text-align: left;
+        cursor: pointer;
+        color: var(--text);
+      }
+
+      .record-card.selected {
+        border-color: var(--accent);
+        background: #eff6ff;
+      }
+
+      .record-card strong {
+        font-size: 13px;
+      }
+
+      .record-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+
+      .answer-box {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 12px;
+        background: #fbfcfd;
+        line-height: 1.55;
+        font-size: 13px;
+      }
+
+      .markdown-body {
+        overflow: auto;
+      }
+
+      .markdown-body h1,
+      .markdown-body h2,
+      .markdown-body h3,
+      .markdown-body h4,
+      .markdown-body h5,
+      .markdown-body h6 {
+        margin: 16px 0 8px;
+        line-height: 1.35;
+      }
+
+      .markdown-body h1 {
+        font-size: 22px;
+      }
+
+      .markdown-body h2 {
+        font-size: 18px;
+      }
+
+      .markdown-body h3 {
+        font-size: 16px;
+      }
+
+      .markdown-body p {
+        margin: 8px 0;
+      }
+
+      .markdown-body ul,
+      .markdown-body ol {
+        margin: 8px 0 8px 22px;
+        padding: 0;
+      }
+
+      .markdown-body li {
+        margin: 4px 0;
+      }
+
+      .markdown-body code {
+        border: 1px solid var(--line);
+        border-radius: 5px;
+        background: #eef2f6;
+        padding: 1px 5px;
+        font-size: 12px;
+      }
+
+      .markdown-body pre code {
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        padding: 0;
+      }
+
+      .markdown-body table {
+        min-width: 0;
+        margin: 10px 0;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+
+      .markdown-body blockquote {
+        margin: 10px 0;
+        padding: 8px 12px;
+        border-left: 3px solid var(--accent);
+        background: #f8fafc;
+        color: var(--muted);
+      }
+
+      .artifact-layout {
+        display: grid;
+        grid-template-columns: minmax(180px, 240px) 1fr;
+        gap: 12px;
+        align-items: start;
+      }
+
+      .artifact-list {
+        display: grid;
+        gap: 7px;
+      }
+
+      .artifact-button {
+        width: 100%;
+        min-height: 34px;
+        border: 1px solid var(--line);
+        border-radius: 7px;
+        background: #fbfcfd;
+        color: var(--text);
+        padding: 7px 9px;
+        text-align: left;
+        cursor: pointer;
+        font-size: 12px;
+      }
+
+      .artifact-button.active {
+        border-color: var(--accent);
+        background: #eff6ff;
+      }
+
+      .artifact-viewer {
+        min-width: 0;
+      }
+
       .actions {
         display: flex;
         align-items: center;
@@ -487,7 +693,9 @@
       }
 
       @media (max-width: 980px) {
-        .layout {
+        .layout,
+        .artifact-layout,
+        .result-grid {
           grid-template-columns: 1fr;
         }
 
@@ -505,7 +713,7 @@
       }
 
       @media (max-width: 620px) {
-        .layout {
+        .page-shell {
           padding: 12px;
         }
 
@@ -546,176 +754,230 @@
           </div>
         </div>
         <div class="status-row">
+          <nav class="nav" aria-label="页面导航">
+            <button class="nav-button active" data-page="launch">启动台</button>
+            <button class="nav-button" data-page="result">结果</button>
+            <button class="nav-button" data-page="config">配置</button>
+          </nav>
           <span class="badge" id="modelBadge">Model</span>
           <span class="badge" id="keyBadge">API Key</span>
         </div>
       </header>
 
-      <main class="layout">
-        <div class="stack">
-          <section class="section">
-            <div class="section-header">
-              <div class="section-title">
-                <h2>运行实验</h2>
-                <span class="subtle">串行执行，避免高并发限制</span>
-              </div>
-            </div>
-            <div class="section-body stack">
-              <div class="form">
-                <div>
-                  <div class="toolbar" style="margin-bottom: 8px;">
-                    <label style="display: block;">选择架构</label>
-                    <div class="mini-actions">
-                      <button class="link-button" id="selectAllRunArch" type="button">全选</button>
-                      <button class="link-button" id="clearRunArch" type="button">清空</button>
+      <main class="page-shell">
+        <section class="page active" id="launchPage" data-page-panel="launch">
+          <div class="layout">
+            <div class="stack">
+              <section class="section">
+                <div class="section-header">
+                  <div class="section-title">
+                    <h2>运行实验</h2>
+                    <span class="subtle">串行执行，避免高并发限制</span>
+                  </div>
+                </div>
+                <div class="section-body stack">
+                  <div class="form">
+                    <div>
+                      <div class="toolbar" style="margin-bottom: 8px;">
+                        <label style="display: block;">选择架构</label>
+                        <div class="mini-actions">
+                          <button class="link-button" id="selectAllRunArch" type="button">全选</button>
+                          <button class="link-button" id="clearRunArch" type="button">清空</button>
+                        </div>
+                      </div>
+                      <div class="check-list" id="runArchitectureChecks"></div>
+                    </div>
+
+                    <div>
+                      <div class="toolbar" style="margin-bottom: 8px;">
+                        <label style="display: block;">选择任务</label>
+                        <div class="mini-actions">
+                          <button class="link-button" id="selectAllRunTasks" type="button">全选</button>
+                          <button class="link-button" id="clearRunTasks" type="button">清空</button>
+                        </div>
+                      </div>
+                      <div class="scroll-list" id="runTaskChecks"></div>
+                    </div>
+
+                    <label class="check-item">
+                      <input type="checkbox" id="runJudge" />
+                      <span>启用 LLM-as-Judge 评分</span>
+                    </label>
+
+                    <div class="progress" aria-label="运行进度">
+                      <div class="progress-fill" id="jobProgressFill"></div>
+                    </div>
+                    <div class="message" id="jobMessage">未启动</div>
+                    <div class="job-events" id="jobEvents">
+                      <div class="empty">暂无运行日志</div>
                     </div>
                   </div>
-                  <div class="check-list" id="runArchitectureChecks"></div>
                 </div>
+                <div class="actions">
+                  <button class="button primary" id="startRunButton" type="button">启动实验</button>
+                </div>
+              </section>
 
-                <div>
-                  <div class="toolbar" style="margin-bottom: 8px;">
-                    <label style="display: block;">选择任务</label>
-                    <div class="mini-actions">
-                      <button class="link-button" id="selectAllRunTasks" type="button">全选</button>
-                      <button class="link-button" id="clearRunTasks" type="button">清空</button>
+              <section class="section">
+                <div class="section-header">
+                  <div class="section-title">
+                    <h2>任务情况</h2>
+                    <span class="subtle" id="taskFileLabel"></span>
+                  </div>
+                </div>
+                <div class="section-body stack">
+                  <div class="meta-grid">
+                    <div class="metric">
+                      <span>任务数</span>
+                      <strong id="taskCount">0</strong>
+                    </div>
+                    <div class="metric">
+                      <span>架构数</span>
+                      <strong id="archCount">0</strong>
+                    </div>
+                    <div class="metric">
+                      <span>历史运行</span>
+                      <strong id="runCount">0</strong>
                     </div>
                   </div>
-                  <div class="scroll-list" id="runTaskChecks"></div>
+                  <div id="taskArea"></div>
                 </div>
+              </section>
+            </div>
 
-                <label class="check-item">
-                  <input type="checkbox" id="runJudge" />
-                  <span>启用 LLM-as-Judge 评分</span>
-                </label>
-
-                <div class="progress" aria-label="运行进度">
-                  <div class="progress-fill" id="jobProgressFill"></div>
-                </div>
-                <div class="message" id="jobMessage">未启动</div>
-                <div class="job-events" id="jobEvents">
-                  <div class="empty">暂无运行日志</div>
+            <section class="section">
+              <div class="section-header">
+                <div class="section-title">
+                  <h2>历史运行</h2>
+                  <span class="subtle">点击条目查看结果</span>
                 </div>
               </div>
-            </div>
-            <div class="actions">
-              <button class="button primary" id="startRunButton" type="button">启动实验</button>
-            </div>
-          </section>
-
-          <section class="section">
-            <div class="section-header">
-              <div class="section-title">
-                <h2>任务情况</h2>
-                <span class="subtle" id="taskFileLabel"></span>
-              </div>
-            </div>
-            <div class="section-body stack">
-              <div class="meta-grid">
-                <div class="metric">
-                  <span>任务数</span>
-                  <strong id="taskCount">0</strong>
-                </div>
-                <div class="metric">
-                  <span>架构数</span>
-                  <strong id="archCount">0</strong>
-                </div>
-                <div class="metric">
-                  <span>历史运行</span>
-                  <strong id="runCount">0</strong>
-                </div>
-              </div>
-              <div id="taskArea"></div>
-            </div>
-          </section>
-
-          <section class="section">
-            <div class="section-header">
-              <div class="section-title">
-                <h2>历史运行</h2>
-                <span class="subtle">outputs/runs</span>
-              </div>
-            </div>
-            <div class="section-body" id="runsArea"></div>
-          </section>
-        </div>
-
-        <section class="section">
-          <div class="section-header">
-            <div class="section-title">
-              <h2>配置</h2>
-              <span class="subtle" id="configPaths"></span>
-            </div>
-            <div class="tabs" role="tablist">
-              <button class="tab active" data-tab="model">模型</button>
-              <button class="tab" data-tab="experiment">实验</button>
-              <button class="tab" data-tab="pricing">成本</button>
-              <button class="tab" data-tab="key">密钥</button>
-            </div>
+              <div class="section-body" id="runsArea"></div>
+            </section>
           </div>
+        </section>
 
-          <div class="section-body">
-            <form class="form" id="configForm">
-              <div id="modelPanel" class="panel" data-panel="model">
-                <div class="field-grid">
-                  <label>provider <input id="provider" autocomplete="off" /></label>
-                  <label>base_url <input id="baseUrl" autocomplete="off" /></label>
-                  <label>anthropic_base_url <input id="anthropicBaseUrl" autocomplete="off" /></label>
-                  <label>model <input id="modelName" autocomplete="off" /></label>
-                  <label>model_version <input id="modelVersion" autocomplete="off" /></label>
-                  <label>reasoning_mode <input id="reasoningMode" autocomplete="off" /></label>
-                  <label>temperature <input id="temperature" type="number" min="0" step="0.1" /></label>
-                  <label>max_tokens <input id="maxTokens" type="number" min="1" step="1" /></label>
-                  <label>context_length_tokens <input id="contextLength" type="number" min="1" step="1" /></label>
-                  <label>max_output_tokens_supported <input id="maxOutputSupported" type="number" min="1" step="1" /></label>
-                  <label>timeout_seconds <input id="timeoutSeconds" type="number" min="1" step="1" /></label>
-                  <label>max_retries <input id="maxRetries" type="number" min="0" step="1" /></label>
-                  <label>retry_backoff_seconds <input id="retryBackoff" type="number" min="0" step="0.1" /></label>
-                  <label>min_request_interval_seconds <input id="minRequestInterval" type="number" min="0" step="0.1" /></label>
+        <section class="page" id="resultPage" data-page-panel="result">
+          <div class="single-column">
+            <section class="section">
+              <div class="section-header">
+                <div class="section-title">
+                  <h2>运行结果</h2>
+                  <span class="subtle" id="selectedRunTitle">请选择历史运行条目</span>
+                </div>
+                <button class="button" id="backToLaunchButton" type="button">返回启动台</button>
+              </div>
+              <div class="section-body" id="resultSummaryArea">
+                <div class="empty">从启动台的历史运行列表点击一条记录后查看详情。</div>
+              </div>
+            </section>
+
+            <section class="section" id="resultFilesSection" hidden>
+              <div class="section-header">
+                <div class="section-title">
+                  <h2>结果文件</h2>
+                  <span class="subtle" id="currentResultTitle">选择一个结果文件</span>
+                </div>
+              </div>
+              <div class="section-body" id="resultFilesArea">
+                <div class="empty">请选择结果记录。</div>
+              </div>
+            </section>
+
+            <section class="section" id="processFilesSection" hidden>
+              <div class="section-header">
+                <div class="section-title">
+                  <h2>过程文件</h2>
+                  <span class="subtle" id="currentProcessTitle">随当前结果文件切换</span>
+                </div>
+              </div>
+              <div class="section-body" id="processFilesArea">
+                <div class="empty">请选择结果记录后查看对应过程文件。</div>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section class="page" id="configPage" data-page-panel="config">
+          <div class="single-column">
+            <section class="section">
+              <div class="section-header">
+                <div class="section-title">
+                  <h2>配置</h2>
+                  <span class="subtle" id="configPaths"></span>
+                </div>
+                <div class="tabs" role="tablist">
+                  <button class="tab active" data-tab="model">模型</button>
+                  <button class="tab" data-tab="experiment">实验</button>
+                  <button class="tab" data-tab="pricing">成本</button>
+                  <button class="tab" data-tab="key">密钥</button>
                 </div>
               </div>
 
-              <div id="experimentPanel" class="panel" data-panel="experiment" hidden>
-                <div class="form">
-                  <label>architectures <div class="check-list" id="architectureChecks"></div></label>
-                  <div class="field-grid">
-                    <label>task_file <input id="taskFile" autocomplete="off" /></label>
-                    <label>output_dir <input id="outputDir" autocomplete="off" /></label>
-                    <label>model_config <input id="modelConfigPath" autocomplete="off" /></label>
-                    <label>pricing_config <input id="pricingConfigPath" autocomplete="off" /></label>
-                    <label>report_file <input id="reportFile" autocomplete="off" /></label>
-                    <label>max_concurrency <input id="maxConcurrency" type="number" min="1" step="1" /></label>
+              <div class="section-body">
+                <form class="form" id="configForm">
+                  <div id="modelPanel" class="panel" data-panel="model">
+                    <div class="field-grid">
+                      <label>provider <input id="provider" autocomplete="off" /></label>
+                      <label>base_url <input id="baseUrl" autocomplete="off" /></label>
+                      <label>anthropic_base_url <input id="anthropicBaseUrl" autocomplete="off" /></label>
+                      <label>model <input id="modelName" autocomplete="off" /></label>
+                      <label>model_version <input id="modelVersion" autocomplete="off" /></label>
+                      <label>reasoning_mode <input id="reasoningMode" autocomplete="off" /></label>
+                      <label>temperature <input id="temperature" type="number" min="0" step="0.1" /></label>
+                      <label>max_tokens <input id="maxTokens" type="number" min="1" step="1" /></label>
+                      <label>context_length_tokens <input id="contextLength" type="number" min="1" step="1" /></label>
+                      <label>max_output_tokens_supported <input id="maxOutputSupported" type="number" min="1" step="1" /></label>
+                      <label>timeout_seconds <input id="timeoutSeconds" type="number" min="1" step="1" /></label>
+                      <label>max_retries <input id="maxRetries" type="number" min="0" step="1" /></label>
+                      <label>retry_backoff_seconds <input id="retryBackoff" type="number" min="0" step="0.1" /></label>
+                      <label>min_request_interval_seconds <input id="minRequestInterval" type="number" min="0" step="0.1" /></label>
+                    </div>
                   </div>
-                </div>
+
+                  <div id="experimentPanel" class="panel" data-panel="experiment" hidden>
+                    <div class="form">
+                      <label>architectures <div class="check-list" id="architectureChecks"></div></label>
+                      <div class="field-grid">
+                        <label>task_file <input id="taskFile" autocomplete="off" /></label>
+                        <label>output_dir <input id="outputDir" autocomplete="off" /></label>
+                        <label>model_config <input id="modelConfigPath" autocomplete="off" /></label>
+                        <label>pricing_config <input id="pricingConfigPath" autocomplete="off" /></label>
+                        <label>report_file <input id="reportFile" autocomplete="off" /></label>
+                        <label>max_concurrency <input id="maxConcurrency" type="number" min="1" step="1" /></label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div id="pricingPanel" class="panel" data-panel="pricing" hidden>
+                    <div class="field-grid">
+                      <label>currency <input id="currency" autocomplete="off" /></label>
+                      <label>unit <input id="pricingUnit" autocomplete="off" /></label>
+                      <label>pricing model <input id="pricingModel" autocomplete="off" /></label>
+                      <label>cached_input_per_1m_tokens <input id="cachedInputPrice" type="number" min="0" step="0.000001" /></label>
+                      <label>input_per_1m_tokens <input id="inputPrice" type="number" min="0" step="0.000001" /></label>
+                      <label>output_per_1m_tokens <input id="outputPrice" type="number" min="0" step="0.000001" /></label>
+                    </div>
+                  </div>
+
+                  <div id="keyPanel" class="panel" data-panel="key" hidden>
+                    <div class="field-grid">
+                      <label>DEEPSEEK_API_KEY <input id="apiKey" type="password" autocomplete="new-password" placeholder="不修改" /></label>
+                    </div>
+                  </div>
+                </form>
               </div>
 
-              <div id="pricingPanel" class="panel" data-panel="pricing" hidden>
-                <div class="field-grid">
-                  <label>currency <input id="currency" autocomplete="off" /></label>
-                  <label>unit <input id="pricingUnit" autocomplete="off" /></label>
-                  <label>pricing model <input id="pricingModel" autocomplete="off" /></label>
-                  <label>cached_input_per_1m_tokens <input id="cachedInputPrice" type="number" min="0" step="0.000001" /></label>
-                  <label>input_per_1m_tokens <input id="inputPrice" type="number" min="0" step="0.000001" /></label>
-                  <label>output_per_1m_tokens <input id="outputPrice" type="number" min="0" step="0.000001" /></label>
-                </div>
+              <div class="actions">
+                <span class="message" id="formMessage"></span>
+                <button class="button" id="refreshButton" type="button">刷新</button>
+                <button class="button" id="previewButton" type="button">预览</button>
+                <button class="button primary" id="saveButton" type="button" disabled>保存</button>
               </div>
 
-              <div id="keyPanel" class="panel" data-panel="key" hidden>
-                <div class="field-grid">
-                  <label>DEEPSEEK_API_KEY <input id="apiKey" type="password" autocomplete="new-password" placeholder="不修改" /></label>
-                </div>
-              </div>
-            </form>
+              <div class="section-body preview" id="previewArea"></div>
+            </section>
           </div>
-
-          <div class="actions">
-            <span class="message" id="formMessage"></span>
-            <button class="button" id="refreshButton" type="button">刷新</button>
-            <button class="button" id="previewButton" type="button">预览</button>
-            <button class="button primary" id="saveButton" type="button" disabled>保存</button>
-          </div>
-
-          <div class="section-body preview" id="previewArea"></div>
         </section>
       </main>
     </div>
@@ -723,9 +985,11 @@
     <script>
       const state = {
         data: null,
+        activePage: "launch",
         activeTab: "model",
         lastPreviewPayload: "",
         jobPollTimer: null,
+        selectedRunFile: "",
       };
 
       const $ = (id) => document.getElementById(id);
@@ -889,8 +1153,8 @@
         const rows = runs
           .map(
             (run) => `
-              <tr>
-                <td>${escapeHtml(run.run_id)}</td>
+              <tr class="click-row" data-run-file="${escapeHtml(run.file)}">
+                <td><button class="link-button run-link" type="button" data-run-file="${escapeHtml(run.file)}">${escapeHtml(run.run_id)}</button></td>
                 <td>${run.records}</td>
                 <td>${run.success}</td>
                 <td>${run.errors}</td>
@@ -908,6 +1172,17 @@
             </table>
           </div>
         `;
+        $("runsArea").querySelectorAll(".run-link").forEach((item) => {
+          item.addEventListener("click", () => loadRunResult(item.dataset.runFile));
+        });
+        $("runsArea").querySelectorAll(".click-row").forEach((item) => {
+          item.addEventListener("click", (event) => {
+            if (event.target.classList.contains("run-link")) {
+              return;
+            }
+            loadRunResult(item.dataset.runFile);
+          });
+        });
       }
 
       function collectPayload() {
@@ -981,6 +1256,203 @@
           $("startRunButton").disabled = false;
           setJobMessage(error.message, "error");
         }
+      }
+
+      async function loadRunResult(file) {
+        if (!file) {
+          return;
+        }
+        state.selectedRunFile = file;
+        showPage("result");
+        $("selectedRunTitle").textContent = file;
+        $("resultSummaryArea").innerHTML = '<div class="empty">正在读取结果...</div>';
+        $("resultFilesSection").hidden = true;
+        $("processFilesSection").hidden = true;
+        $("resultFilesArea").innerHTML = "";
+        $("processFilesArea").innerHTML = "";
+        $("currentResultTitle").textContent = "选择一个结果文件";
+        $("currentProcessTitle").textContent = "随当前结果文件切换";
+        try {
+          const data = await requestJson(`/api/run-result?file=${encodeURIComponent(file)}`);
+          renderRunResult(data.result);
+        } catch (error) {
+          $("resultSummaryArea").innerHTML = `<div class="empty">${escapeHtml(error.message)}</div>`;
+        }
+      }
+
+      function renderRunResult(result) {
+        const summary = result.summary;
+        $("selectedRunTitle").textContent = result.file;
+        $("resultFilesSection").hidden = !result.records.length;
+        $("processFilesSection").hidden = !result.records.length;
+        const recordCards = result.records
+          .map((record, index) => renderRecordCard(record, index))
+          .join("");
+        $("resultSummaryArea").innerHTML = `
+          <div class="meta-grid">
+            <div class="metric"><span>记录数</span><strong>${summary.record_count}</strong></div>
+            <div class="metric"><span>成功</span><strong>${summary.success_count}</strong></div>
+            <div class="metric"><span>错误</span><strong>${summary.error_count}</strong></div>
+            <div class="metric"><span>Total Tokens</span><strong>${summary.total_tokens}</strong></div>
+            <div class="metric"><span>成本</span><strong>${summary.estimated_cost}</strong></div>
+            <div class="metric"><span>修改时间</span><strong style="font-size: 14px;">${escapeHtml(summary.modified_at)}</strong></div>
+          </div>
+        `;
+        $("resultFilesArea").innerHTML = `
+          <div class="result-grid">
+            <div class="record-list">${recordCards || '<div class="empty">没有记录</div>'}</div>
+            <div id="recordDetail"><div class="empty">没有记录</div></div>
+          </div>
+        `;
+        $("resultFilesArea").querySelectorAll(".record-card").forEach((item) => {
+          item.addEventListener("click", () => {
+            const index = Number(item.dataset.recordIndex);
+            $("resultFilesArea").querySelectorAll(".record-card").forEach((card) => card.classList.remove("selected"));
+            item.classList.add("selected");
+            showRecordDetail(result.records[index]);
+          });
+        });
+        const firstCard = $("resultFilesArea").querySelector(".record-card");
+        if (firstCard) {
+          firstCard.classList.add("selected");
+          showRecordDetail(result.records[0]);
+        }
+      }
+
+      function renderRecordCard(record, index) {
+        const status = record.success ? "成功" : "失败";
+        return `
+          <button class="record-card" type="button" data-record-index="${index}">
+            <strong>${escapeHtml(record.architecture || "")} / ${escapeHtml(record.task_id || "")}</strong>
+            <div class="record-meta">
+              <span class="badge ${record.success ? "success" : "warning"}">${status}</span>
+              <span class="badge">${escapeHtml(record.category || "")}</span>
+              <span class="badge">${record.total_tokens || 0} tokens</span>
+              <span class="badge">${record.latency_seconds || 0}s</span>
+            </div>
+          </button>
+        `;
+      }
+
+      function renderRecordDetail(record) {
+        const judge = record.judge_eval ? JSON.stringify(record.judge_eval, null, 2) : "";
+        return `
+          <div class="stack">
+            <div class="section-title">
+              <h2>${escapeHtml(record.architecture || "")} / ${escapeHtml(record.task_id || "")}</h2>
+              <span class="subtle">${record.success ? "success" : escapeHtml(record.error || "failed")}</span>
+            </div>
+            <div class="meta-grid">
+              <div class="metric"><span>Latency</span><strong>${record.latency_seconds || 0}s</strong></div>
+              <div class="metric"><span>Tokens</span><strong>${record.total_tokens || 0}</strong></div>
+              <div class="metric"><span>Cost</span><strong>${record.estimated_cost || 0}</strong></div>
+            </div>
+            <div>
+              <div class="subtle" style="margin-bottom: 6px;">Final Answer</div>
+              <div class="answer-box markdown-body">${renderMarkdown(record.final_answer || record.error || "")}</div>
+            </div>
+            ${
+              judge
+                ? `<div><div class="subtle" style="margin-bottom: 6px;">Judge Eval</div><pre>${escapeHtml(judge)}</pre></div>`
+                : ""
+            }
+            <div>
+              <div class="subtle" style="margin-bottom: 6px;">完整结果记录</div>
+              <pre>${escapeHtml(JSON.stringify(record, null, 2))}</pre>
+            </div>
+          </div>
+        `;
+      }
+
+      function showRecordDetail(record) {
+        $("recordDetail").innerHTML = renderRecordDetail(record);
+        $("currentResultTitle").textContent = `${record.architecture || ""} / ${record.task_id || ""}`;
+        $("currentProcessTitle").textContent = `${record.architecture || ""} / ${record.task_id || ""} 的 intermediate_outputs`;
+        renderProcessFiles(record);
+      }
+
+      function renderProcessFiles(record) {
+        const files = buildProcessFiles(record);
+        if (!files.length) {
+          $("processFilesArea").innerHTML = '<div class="empty">当前结果文件没有中间过程输出。</div>';
+          return;
+        }
+        const processFileButtons = files
+          .map(
+            (file, index) => `
+              <button class="artifact-button" type="button" data-artifact-index="${index}">
+                ${escapeHtml(file.name)}
+              </button>
+            `
+          )
+          .join("");
+        $("processFilesArea").innerHTML = `
+          <div class="artifact-layout">
+            <div class="artifact-list">${processFileButtons}</div>
+            <div class="artifact-viewer">
+              <div class="subtle" id="artifactTitle" style="margin-bottom: 6px;"></div>
+              <div id="artifactBody" class="answer-box"></div>
+            </div>
+          </div>
+        `;
+        const buttons = $("processFilesArea").querySelectorAll(".artifact-button");
+        buttons.forEach((button) => {
+          button.addEventListener("click", () => {
+            const index = Number(button.dataset.artifactIndex);
+            buttons.forEach((item) => item.classList.remove("active"));
+            button.classList.add("active");
+            renderArtifact(files[index]);
+          });
+        });
+        if (buttons.length && files.length) {
+          buttons[0].classList.add("active");
+          renderArtifact(files[0]);
+        }
+      }
+
+      function buildProcessFiles(record) {
+        const files = [];
+        const intermediate = record.intermediate_outputs || {};
+        Object.entries(intermediate).forEach(([key, value]) => {
+          if (value && typeof value === "object" && typeof value.content === "string") {
+            const meta = { ...value };
+            delete meta.content;
+            const metaLines = Object.keys(meta).length
+              ? `\n\n---\n\n\`\`\`json\n${JSON.stringify(meta, null, 2)}\n\`\`\`\n`
+              : "";
+            files.push({
+              name: `${record.architecture || "agent"}_${record.task_id || "task"}_${key}.md`,
+              type: "markdown",
+              content: `# ${key}\n\n${value.content}${metaLines}`,
+            });
+          } else {
+            files.push({
+              name: `${record.architecture || "agent"}_${record.task_id || "task"}_${key}.json`,
+              type: "json",
+              content: JSON.stringify(value, null, 2),
+            });
+          }
+        });
+
+        if (Object.keys(intermediate).length) {
+          files.push({
+            name: `${record.architecture || "agent"}_${record.task_id || "task"}_intermediate_outputs.json`,
+            type: "json",
+            content: JSON.stringify(intermediate, null, 2),
+          });
+        }
+        return files;
+      }
+
+      function renderArtifact(file) {
+        $("artifactTitle").textContent = file.name;
+        if (file.type === "markdown") {
+          $("artifactBody").className = "answer-box markdown-body";
+          $("artifactBody").innerHTML = renderMarkdown(file.content);
+          return;
+        }
+        $("artifactBody").className = "answer-box";
+        $("artifactBody").innerHTML = `<pre>${escapeHtml(file.content || "")}</pre>`;
       }
 
       function startJobPolling() {
@@ -1102,6 +1574,16 @@
         });
       }
 
+      function showPage(page) {
+        state.activePage = page;
+        document.querySelectorAll("[data-page-panel]").forEach((panel) => {
+          panel.classList.toggle("active", panel.dataset.pagePanel === page);
+        });
+        document.querySelectorAll(".nav-button").forEach((button) => {
+          button.classList.toggle("active", button.dataset.page === page);
+        });
+      }
+
       function setMessage(text, type = "") {
         $("formMessage").textContent = text;
         $("formMessage").className = "message " + type;
@@ -1124,9 +1606,13 @@
       document.querySelectorAll(".tab").forEach((button) => {
         button.addEventListener("click", () => switchTab(button.dataset.tab));
       });
+      document.querySelectorAll(".nav-button").forEach((button) => {
+        button.addEventListener("click", () => showPage(button.dataset.page));
+      });
       $("previewButton").addEventListener("click", previewConfig);
       $("saveButton").addEventListener("click", saveConfig);
       $("refreshButton").addEventListener("click", loadState);
+      $("backToLaunchButton").addEventListener("click", () => showPage("launch"));
       $("startRunButton").addEventListener("click", startRun);
       $("selectAllRunArch").addEventListener("click", () => setCheckedWithin("runArchitectureChecks", true));
       $("clearRunArch").addEventListener("click", () => setCheckedWithin("runArchitectureChecks", false));
@@ -1141,6 +1627,172 @@
         $(containerId).querySelectorAll("input[type='checkbox']").forEach((item) => {
           item.checked = checked;
         });
+      }
+
+      function renderMarkdown(markdown) {
+        const lines = String(markdown || "").replace(/\r\n/g, "\n").split("\n");
+        const html = [];
+        let paragraph = [];
+        let listType = "";
+        let listItems = [];
+        let inCode = false;
+        let codeLines = [];
+        let codeLang = "";
+
+        function flushParagraph() {
+          if (!paragraph.length) return;
+          html.push(`<p>${formatInline(paragraph.join(" "))}</p>`);
+          paragraph = [];
+        }
+
+        function flushList() {
+          if (!listType) return;
+          html.push(`<${listType}>${listItems.map((item) => `<li>${formatInline(item)}</li>`).join("")}</${listType}>`);
+          listType = "";
+          listItems = [];
+        }
+
+        function flushCode() {
+          html.push(`<pre><code>${escapeHtml(codeLines.join("\n"))}</code></pre>`);
+          inCode = false;
+          codeLines = [];
+          codeLang = "";
+        }
+
+        for (let index = 0; index < lines.length; index += 1) {
+          const line = lines[index];
+          const trimmed = line.trim();
+
+          if (trimmed.startsWith("```")) {
+            if (inCode) {
+              flushCode();
+            } else {
+              flushParagraph();
+              flushList();
+              inCode = true;
+              codeLang = trimmed.slice(3).trim();
+              codeLines = [];
+            }
+            continue;
+          }
+
+          if (inCode) {
+            codeLines.push(line);
+            continue;
+          }
+
+          if (!trimmed) {
+            flushParagraph();
+            flushList();
+            continue;
+          }
+
+          if (isTableStart(lines, index)) {
+            flushParagraph();
+            flushList();
+            const table = collectTable(lines, index);
+            html.push(renderMarkdownTable(table.rows));
+            index = table.endIndex;
+            continue;
+          }
+
+          const headingMatch = trimmed.match(/^(#{1,6})\s+(.+)$/);
+          if (headingMatch) {
+            flushParagraph();
+            flushList();
+            const level = headingMatch[1].length;
+            html.push(`<h${level}>${formatInline(headingMatch[2])}</h${level}>`);
+            continue;
+          }
+
+          if (/^(-{3,}|\*{3,})$/.test(trimmed)) {
+            flushParagraph();
+            flushList();
+            html.push("<hr />");
+            continue;
+          }
+
+          const unorderedMatch = trimmed.match(/^[-*]\s+(.+)$/);
+          if (unorderedMatch) {
+            flushParagraph();
+            if (listType && listType !== "ul") flushList();
+            listType = "ul";
+            listItems.push(unorderedMatch[1]);
+            continue;
+          }
+
+          const orderedMatch = trimmed.match(/^\d+\.\s+(.+)$/);
+          if (orderedMatch) {
+            flushParagraph();
+            if (listType && listType !== "ol") flushList();
+            listType = "ol";
+            listItems.push(orderedMatch[1]);
+            continue;
+          }
+
+          const quoteMatch = trimmed.match(/^>\s*(.+)$/);
+          if (quoteMatch) {
+            flushParagraph();
+            flushList();
+            html.push(`<blockquote>${formatInline(quoteMatch[1])}</blockquote>`);
+            continue;
+          }
+
+          paragraph.push(trimmed);
+        }
+
+        if (inCode) flushCode();
+        flushParagraph();
+        flushList();
+        return html.join("");
+      }
+
+      function isTableStart(lines, index) {
+        const current = lines[index]?.trim() || "";
+        const next = lines[index + 1]?.trim() || "";
+        return current.includes("|") && /^\|?\s*:?-{3,}:?\s*(\|\s*:?-{3,}:?\s*)+\|?$/.test(next);
+      }
+
+      function collectTable(lines, startIndex) {
+        const rows = [];
+        let index = startIndex;
+        while (index < lines.length && lines[index].trim().includes("|")) {
+          if (index !== startIndex + 1) {
+            rows.push(splitTableRow(lines[index]));
+          }
+          index += 1;
+        }
+        return { rows, endIndex: index - 1 };
+      }
+
+      function splitTableRow(line) {
+        return line
+          .trim()
+          .replace(/^\|/, "")
+          .replace(/\|$/, "")
+          .split("|")
+          .map((cell) => cell.trim());
+      }
+
+      function renderMarkdownTable(rows) {
+        if (!rows.length) return "";
+        const headers = rows[0];
+        const bodyRows = rows.slice(1);
+        return `
+          <table>
+            <thead><tr>${headers.map((cell) => `<th>${formatInline(cell)}</th>`).join("")}</tr></thead>
+            <tbody>${bodyRows
+              .map((row) => `<tr>${row.map((cell) => `<td>${formatInline(cell)}</td>`).join("")}</tr>`)
+              .join("")}</tbody>
+          </table>
+        `;
+      }
+
+      function formatInline(value) {
+        return escapeHtml(value)
+          .replace(/`([^`]+)`/g, "<code>$1</code>")
+          .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+          .replace(/\*([^*]+)\*/g, "<em>$1</em>");
       }
 
       loadState()

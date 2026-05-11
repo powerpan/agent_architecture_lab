@@ -10,7 +10,7 @@ from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any, Dict, List, Tuple
-from urllib.parse import urlparse
+from urllib.parse import parse_qs, urlparse
 from uuid import uuid4
 
 import yaml
@@ -41,6 +41,9 @@ class LabWebHandler(BaseHTTPRequestHandler):
             return
         if parsed.path == "/api/job":
             self._send_json({"ok": True, "job": get_job_snapshot()})
+            return
+        if parsed.path == "/api/run-result":
+            self._handle_run_result(parsed.query)
             return
         self._send_error(HTTPStatus.NOT_FOUND, "Not found")
 
@@ -162,6 +165,17 @@ class LabWebHandler(BaseHTTPRequestHandler):
         thread = threading.Thread(target=run_job, args=(job_id, run_request), daemon=True)
         thread.start()
         self._send_json({"ok": True, "job": get_job_snapshot()})
+
+    def _handle_run_result(self, query: str) -> None:
+        params = parse_qs(query)
+        file_value = (params.get("file") or [""])[0]
+        if not file_value:
+            self._send_json({"ok": False, "errors": ["file is required"]}, status=HTTPStatus.BAD_REQUEST)
+            return
+        try:
+            self._send_json({"ok": True, "result": read_run_result(file_value)})
+        except Exception as exc:
+            self._send_json({"ok": False, "errors": [str(exc)]}, status=HTTPStatus.BAD_REQUEST)
 
 
 def get_job_snapshot() -> Dict[str, Any] | None:
@@ -410,6 +424,45 @@ def read_run_summaries() -> List[Dict[str, Any]]:
             }
         )
     return summaries
+
+
+def read_run_result(file_value: str) -> Dict[str, Any]:
+    result_path = resolve_repo_path(file_value)
+    run_dir = (ROOT_DIR / "outputs" / "runs").resolve()
+    if not result_path.is_file() or result_path.suffix != ".jsonl":
+        raise ValueError("result file must be a JSONL file")
+    if not result_path.resolve().is_relative_to(run_dir):
+        raise ValueError("result file must be under outputs/runs")
+
+    records: List[Dict[str, Any]] = []
+    with result_path.open("r", encoding="utf-8") as file:
+        for line_number, line in enumerate(file, start=1):
+            stripped = line.strip()
+            if not stripped:
+                continue
+            try:
+                records.append(json.loads(stripped))
+            except json.JSONDecodeError as exc:
+                raise ValueError(f"invalid JSON at line {line_number}: {exc}") from exc
+
+    success_count = sum(1 for record in records if record.get("success"))
+    architectures = sorted({str(record.get("architecture")) for record in records if record.get("architecture")})
+    task_ids = sorted({str(record.get("task_id")) for record in records if record.get("task_id")})
+    return {
+        "file": str(result_path.relative_to(ROOT_DIR)),
+        "run_id": result_path.stem,
+        "records": records,
+        "summary": {
+            "record_count": len(records),
+            "success_count": success_count,
+            "error_count": len(records) - success_count,
+            "architectures": architectures,
+            "task_ids": task_ids,
+            "total_tokens": sum(int(record.get("total_tokens") or 0) for record in records),
+            "estimated_cost": round(sum(float(record.get("estimated_cost") or 0) for record in records), 8),
+            "modified_at": datetime.fromtimestamp(result_path.stat().st_mtime).strftime("%Y-%m-%d %H:%M:%S"),
+        },
+    }
 
 
 def normalize_payload(payload: Dict[str, Any]) -> Tuple[Dict[str, Any], Dict[str, Any], Dict[str, Any], List[str]]:
