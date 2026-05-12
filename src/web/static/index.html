@@ -143,6 +143,29 @@
         background: #fff7ed;
       }
 
+      .shutdown-button {
+        min-height: 32px;
+        border: 1px solid rgba(180, 35, 24, 0.38);
+        border-radius: 7px;
+        padding: 6px 10px;
+        color: var(--danger);
+        background: #fff5f5;
+        cursor: pointer;
+        font-size: 12px;
+        font-weight: 650;
+        white-space: nowrap;
+      }
+
+      .shutdown-button:hover {
+        border-color: rgba(180, 35, 24, 0.65);
+        background: #ffecec;
+      }
+
+      .shutdown-button:disabled {
+        cursor: not-allowed;
+        opacity: 0.6;
+      }
+
       .page-shell {
         padding: 18px;
       }
@@ -827,6 +850,7 @@
           </nav>
           <span class="badge" id="modelBadge">Model</span>
           <span class="badge" id="keyBadge">API Key</span>
+          <button class="shutdown-button" id="shutdownButton" type="button">退出服务</button>
         </div>
       </header>
 
@@ -1657,6 +1681,36 @@
         }
       }
 
+      async function shutdownService() {
+        const job = state.data && state.data.job;
+        const running = job && ["queued", "running"].includes(job.status);
+        const message = running
+          ? `当前还有实验正在运行（${job.completed || 0}/${job.total || 0}）。确定要退出本地服务吗？正在运行的实验会被中断，页面随后会失去连接。`
+          : "确定要退出本地服务吗？页面随后会失去连接。";
+        if (!window.confirm(message)) {
+          return;
+        }
+        $("shutdownButton").disabled = true;
+        $("shutdownButton").textContent = "正在退出";
+        try {
+          await requestJson("/api/shutdown", {
+            method: "POST",
+            body: JSON.stringify({ force: running }),
+          });
+          if (state.jobPollTimer) {
+            clearInterval(state.jobPollTimer);
+            state.jobPollTimer = null;
+          }
+          setJobMessage("本地服务已请求退出，可以关闭这个页面。", "success");
+          setMessage("本地服务已请求退出，可以关闭这个页面。", "success");
+        } catch (error) {
+          $("shutdownButton").disabled = false;
+          $("shutdownButton").textContent = "退出服务";
+          setMessage(error.message, "error");
+          setJobMessage(error.message, "error");
+        }
+      }
+
       function renderPreview(previews) {
         $("previewArea").innerHTML = Object.entries(previews)
           .map(
@@ -1720,6 +1774,7 @@
       $("refreshButton").addEventListener("click", loadState);
       $("backToLaunchButton").addEventListener("click", () => showPage("launch"));
       $("startRunButton").addEventListener("click", startRun);
+      $("shutdownButton").addEventListener("click", shutdownService);
       $("selectAllRunArch").addEventListener("click", () => setCheckedWithin("runArchitectureChecks", true));
       $("clearRunArch").addEventListener("click", () => setCheckedWithin("runArchitectureChecks", false));
       $("selectAllRunTasks").addEventListener("click", () => setCheckedWithin("runTaskChecks", true));

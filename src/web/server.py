@@ -49,12 +49,15 @@ class LabWebHandler(BaseHTTPRequestHandler):
 
     def do_POST(self) -> None:
         parsed = urlparse(self.path)
-        if parsed.path not in {"/api/preview", "/api/save", "/api/start"}:
+        if parsed.path not in {"/api/preview", "/api/save", "/api/start", "/api/shutdown"}:
             self._send_error(HTTPStatus.NOT_FOUND, "Not found")
             return
 
         try:
             payload = self._read_json()
+            if parsed.path == "/api/shutdown":
+                self._handle_shutdown(payload)
+                return
             if parsed.path == "/api/start":
                 self._handle_start(payload)
                 return
@@ -176,6 +179,24 @@ class LabWebHandler(BaseHTTPRequestHandler):
             self._send_json({"ok": True, "result": read_run_result(file_value)})
         except Exception as exc:
             self._send_json({"ok": False, "errors": [str(exc)]}, status=HTTPStatus.BAD_REQUEST)
+
+    def _handle_shutdown(self, payload: Dict[str, Any]) -> None:
+        force = bool(payload.get("force"))
+        active_job = get_job_snapshot()
+        active = active_job and active_job.get("status") in {"queued", "running"}
+        if active and not force:
+            self._send_json(
+                {
+                    "ok": False,
+                    "errors": ["已有实验正在运行。如需强制退出，请设置 force=true。"],
+                    "job": active_job,
+                },
+                status=HTTPStatus.CONFLICT,
+            )
+            return
+
+        self._send_json({"ok": True, "message": "本地服务正在退出。"})
+        threading.Thread(target=self.server.shutdown, daemon=True).start()
 
 
 def get_job_snapshot() -> Dict[str, Any] | None:
